@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: tidb-qps-test
+  labels:
+    component: curator
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: tidb-qps-test
+              image: 409951699/tidb-test:1.0.0
+              imagePullPolicy: IfNotPresent
+              command: [ "python", "/main.py" ]
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name:
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
